@@ -30,7 +30,7 @@ namespace Microsoft.Azure.Cosmos
             JsonSerializerOptions jsonSerializerOptions)
         {
             this.jsonSerializerOptions = jsonSerializerOptions;
-            //somehow adding a .NET native type converter as an attribute on properties doesnt take effect. In this case I tried adding it to AdditionalProperties of Geometry class.
+            //somehow adding a .NET native type converter(in this case Dictionary) as an attribute on properties doesnt take effect. So adding it here instead
             this.jsonSerializerOptions.Converters.Add(new DictionarySTJConverter());
         }
 
@@ -62,6 +62,7 @@ namespace Microsoft.Azure.Cosmos
         {
             MemoryStream streamPayload = new ();
             using Utf8JsonWriter writer = new (streamPayload);
+            
             JsonSerializer.Serialize(writer, input, this.jsonSerializerOptions);
 
             streamPayload.Position = 0;
